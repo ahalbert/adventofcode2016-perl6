@@ -2,7 +2,17 @@
 my @buttons = (('1','2','3'),('4','5','6'),('7','8','9')); 
 
 #Subtype of list where all items are Str with UDLR\n
+my Str $test = q{ULL
+RRDDD
+LURDL
+UUUUD
+};
 subset DirectionList of List where { .map({$_ ~~ Str and $_ ~~ 'U'|'D'|'L'|'R'|"\n"}) ==> reduce { $^a and $^b} }
+sub dl(DirectionList $d) is export {
+    for $d {
+        say $_;
+    }
+}
 
 sub bathroomKeypad(@input) returns Str is export { 
     my ($x, $y) = 1, 1;
