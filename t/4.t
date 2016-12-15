@@ -1,6 +1,6 @@
 use advent::decoyroom;
 use Test;
-plan 16;
+plan 17;
 
 my @sample1 = decode('aaaa-bbb-z-y-x-123[abxyz]');
 my @sample2 = decode('a-b-c-d-e-f-g-h-987[abcde]');
@@ -27,6 +27,10 @@ is Room.new('aaaa-bbb-z-y-x-123[abxyz]').Bool, True;
 is Room.new('a-b-c-d-e-f-g-h-987[abcde]').Bool, True;
 is Room.new('not-a-real-room-404[oarel]').Bool, True;
 is Room.new('totally-real-room-200[decoy]').Bool, False;
+is Room.new('qzmt-zixmtkozy-ivhz-343[abcde]').plaintext, 'very encrypted name';
 
 my @decoded = "static/4.txt".IO.lines.map({ Room.new($_); });
-say (@decoded ==> grep {$_.Bool} ==> map {$_[0].sector} ==> sum );
+say (@decoded.cache ==> grep {$_.Bool} ==> map {$_[0].sector} ==> sum );
+my @real = @decoded ==> grep {$_.Bool};
+my @candidates = @real.grep: { $_.plaintext ~~ /.*north.*/};
+say @candidates;
